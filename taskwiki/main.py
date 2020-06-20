@@ -394,6 +394,7 @@ class Meta(object):
             "Displayed tasks: {5}\n"
             "Tasks to be added: {6}\n"
             "Tasks to be deleted: {7}\n"
+            "{8}\n"
         )
 
         if port is not None:
@@ -414,6 +415,9 @@ class Meta(object):
                 len(port.tasks),
                 ', '.join(map(six.text_type, to_add)),
                 ', '.join(map(six.text_type, to_del)),
+                "Expired: " + port.expires
+                if port.expired
+                else 'Expires: ' + (port.expires if port.expires else 'never'),
             )
 
             # Show in the split
