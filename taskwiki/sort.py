@@ -1,6 +1,7 @@
 from taskwiki import constants
 from taskwiki import util
 
+
 class TaskSorter(object):
     def __init__(self, cache, tasks, sortstring=None):
         self.cache = cache
@@ -24,7 +25,8 @@ class TaskSorter(object):
         comparator = CustomNodeComparator(self.sortstring)
 
         # Generate the empty nodes
-        node_list = [TaskCollectionNode(vwtask, comparator) for vwtask in task_list]
+        node_list = [TaskCollectionNode(vwtask, comparator)
+                     for vwtask in task_list]
 
         # Set parents and children for every node
         for node in node_list:
@@ -151,7 +153,8 @@ class TaskCollectionNode(object):
         if self.parent is None:
             self._parent = parent
         else:
-            raise ValueError("TaskCollectionNode %s cannot have multiple parents" % repr(self))
+            raise ValueError("TaskCollectionNode %s cannot have multiple parents %s %s" % (repr(
+                self), repr(self.parent), repr(parent)))
 
     def __iter__(self):
         # First return itself

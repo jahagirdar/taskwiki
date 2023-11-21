@@ -84,6 +84,10 @@ execute "command! -buffer -range TaskWikiStop :<line1>,<line2>"   . g:taskwiki_p
 execute "command! -buffer -range TaskWikiToggle :<line1>,<line2>" . g:taskwiki_py . "SelectedTasks().toggle()"
 execute "command! -buffer -range TaskWikiDone :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().done()"
 execute "command! -buffer -range TaskWikiRedo :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().redo()"
+" Commands Added by Vijay 
+execute "command! -buffer -range TaskWikiGetUUID :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().get_uuid()"
+execute "command! -buffer -range TaskWikiSetTJ3Depend :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().set_mktj3depend()"
+execute "command! -buffer -range TaskWikiNote :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().taskNote()"
 
 execute "command! -buffer -range -nargs=* TaskWikiSort :<line1>,<line2>"     . g:taskwiki_py . "SelectedTasks().sort(<q-args>)"
 execute "command! -buffer -range -nargs=* TaskWikiAnnotate :<line1>,<line2>" . g:taskwiki_py . "SelectedTasks().annotate(<q-args>)"
@@ -157,4 +161,8 @@ if !exists('g:taskwiki_suppress_mappings')
   vnoremap <silent><buffer> <LocalLeader>. :TaskWikiRedo<CR>
   vnoremap <silent><buffer> <LocalLeader>+ :TaskWikiStart<CR>
   vnoremap <silent><buffer> <LocalLeader>- :TaskWikiStop<CR>
+	" Vijays TJ3 Mapping
+        nnoremap <silent><buffer> <LocalLeader>tsp :TaskWikiGetUUID<CR>
+        nnoremap <silent><buffer> <LocalLeader>tsc :TaskWikiSetTJ3Depend<CR>
+        nnoremap <silent><buffer> <LocalLeader>tn :TaskWikiNote<CR>
 endif
