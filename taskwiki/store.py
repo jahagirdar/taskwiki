@@ -20,6 +20,7 @@ class WarriorStore(object):
         for key in extra_warrior_defs.keys():
             current_kwargs = default_kwargs.copy()
             current_kwargs.update(extra_warrior_defs[key])
+            print(current_kwargs)
             self.warriors[key] = TaskWarrior(**current_kwargs)
 
         # Make sure context is not respected in any TaskWarrior

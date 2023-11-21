@@ -6,6 +6,9 @@ import pickle
 import six
 import sys
 import vim  # pylint: disable=F0401
+import logging
+logging.basicConfig(filename="/tmp/taskwiki.log", level=logging.DEBUG)
+logging.info("Started Taskwiki")
 
 # Insert the taskwiki on the python path
 BASE_DIR = vim.eval("s:plugin_path")
@@ -19,7 +22,7 @@ from taskwiki import viewport
 from taskwiki import decorators
 from taskwiki import completion
 from taskwiki import preset
-
+from taskwiki import jvstj3
 
 cache = cache_module.CacheRegistry()
 cache.load_current()
@@ -97,7 +100,8 @@ class SelectedTasks(object):
 
         for vimwikitask in self.tasks:
             vimwikitask.task.add_annotation(annotation)
-            print(u"Task \"{0}\" annotated.".format(vimwikitask['description']))
+            print(u"Task \"{0}\" annotated.".format(
+                vimwikitask['description']))
 
         self.save_action('annotate', annotation)
 
@@ -112,14 +116,39 @@ class SelectedTasks(object):
         for vimwikitask in self.tasks:
             vimwikitask.update_from_task()
             vimwikitask.update_in_buffer()
-            print(u"Task \"{0}\" completed.".format(vimwikitask['description']))
+            print(u"Task \"{0}\" completed.".format(
+                vimwikitask['description']))
 
         cache().buffer.push()
         self.save_action('done')
 
     @errors.pretty_exception_handler
+    def get_uuid(self):
+        for vimwikitask in self.tasks:
+            vim.command(f"let g:vjTaskUUID='{vimwikitask.uuid}'")
+
+    @errors.pretty_exception_handler
+    def taskNote(self):
+        """
+        This will work only on the first task
+        """
+        tsk = self.tasks[0]
+        vim.command(f"edit {os.environ.get('TASKNOTE_LOC','~/tasknotes')}/{tsk.uuid}.md")
+
+    @errors.pretty_exception_handler
+    def set_mktj3depend(self):
+        tj3parentuuid = vim.eval('g:vjTaskUUID').strip()
+        if tj3parentuuid is None:
+            print("Oops Parent not set!")
+            return
+        for vimwikitask in self.tasks:
+            jvstj3.addtj3_depend(vimwikitask.uuid, tj3parentuuid)
+            vim.command(f"let g:vjTaskUUID='{vimwikitask.uuid}'")
+
+    @errors.pretty_exception_handler
     def info(self):
         for vimwikitask in self.tasks:
+            logging.info(f"Started Info {vimwikitask.uuid}")
             out = util.tw_execute_safely(self.tw, [vimwikitask.uuid, 'info'])
             if out:
                 util.show_in_split(out, name='info', activate_cursorline=True)
@@ -185,7 +214,8 @@ class SelectedTasks(object):
 
         # We might have two same tasks in the range, make sure we do not pass the
         # same uuid twice
-        unique_tasks = set(vimwikitask.task['uuid'] for vimwikitask in self.tasks)
+        unique_tasks = set(vimwikitask.task['uuid']
+                           for vimwikitask in self.tasks)
         uuids = list(unique_tasks)
 
         # Generate the arguments from the modstring
@@ -214,7 +244,6 @@ class SelectedTasks(object):
         if self.__class__.last_action:
             method = getattr(self, self.__class__.last_action['method'])
             method(*self.__class__.last_action.get('args', tuple()))
-
 
     @errors.pretty_exception_handler
     def start(self):
@@ -265,9 +294,11 @@ class SelectedTasks(object):
             vimwikitask.update_from_task()
             vimwikitask.update_in_buffer()
             if task in started:
-                print(u"Task \"{0}\" started.".format(vimwikitask['description']))
+                print(u"Task \"{0}\" started.".format(
+                    vimwikitask['description']))
             else:
-                print(u"Task \"{0}\" stopped.".format(vimwikitask['description']))
+                print(u"Task \"{0}\" stopped.".format(
+                    vimwikitask['description']))
 
         cache().buffer.push()
         self.save_action('toggle')
@@ -325,7 +356,6 @@ class Mappings(object):
         vim.command('VimwikiFollowLink')
 
 
-
 class Meta(object):
 
     @errors.pretty_exception_handler
@@ -360,8 +390,10 @@ class Meta(object):
             # Fill in the interesting info in the template
             template_formatted = template.format(
                 port.name if six.PY3 else port.name.encode('utf-8'),
-                port.raw_filter if six.PY3 else port.raw_filter.encode('utf-8'),
-                port.raw_defaults if six.PY3 else port.raw_defaults.encode('utf-8'),
+                port.raw_filter if six.PY3 else port.raw_filter.encode(
+                    'utf-8'),
+                port.raw_defaults if six.PY3 else port.raw_defaults.encode(
+                    'utf-8'),
                 port.sort,
                 len(port.matching_tasks),
                 len(port.tasks),
@@ -372,7 +404,6 @@ class Meta(object):
             # Show in the split
             lines = template_formatted.splitlines()
             util.show_in_split(lines, activate_cursorline=True)
-
 
     @errors.pretty_exception_handler
     def inspect_presetheader(self):
@@ -390,8 +421,10 @@ class Meta(object):
 
             # Fill in the interesting info in the template
             template_formatted = template.format(
-                header.raw_filter if six.PY3 else header.raw_filter.encode('utf-8'),
-                header.raw_defaults if six.PY3 else header.raw_defaults.encode('utf-8'),
+                header.raw_filter if six.PY3 else header.raw_filter.encode(
+                    'utf-8'),
+                header.raw_defaults if six.PY3 else header.raw_defaults.encode(
+                    'utf-8'),
             )
 
             # Show in the split
@@ -410,7 +443,7 @@ class Meta(object):
                 'sort': 0,
                 'ctagsbin': os.path.join(BASE_DIR, 'extra/vwtags.py'),
                 'ctagsargs': cache().markup_syntax
-                }
+            }
 
     @errors.pretty_exception_handler
     def set_proper_colors(self):
@@ -528,7 +561,7 @@ class CallbackSplitMixin(object):
         # We can't save the current instance in vim variable
         # so save the pickled version
         dump = pickle.dumps((
-            {k:v for k,v in self.__dict__.items() if k != 'selected'},
+            {k: v for k, v in self.__dict__.items() if k != 'selected'},
             self.selected.__dict__)
         )
 
@@ -543,8 +576,8 @@ class CallbackSplitMixin(object):
             "callback = {0}('');".format(self.__class__.__name__) +
             "orig_dict, selected_dict = pickle.loads("
             "base64.decodebytes("
-              "six.b(util.get_var('taskwiki_callback', "
-                                  "vars_obj=vim.current.buffer.vars)))); "
+            "six.b(util.get_var('taskwiki_callback', "
+            "vars_obj=vim.current.buffer.vars)))); "
             "callback.__dict__.update(orig_dict);"
             "callback.selected.__dict__ = selected_dict;"
             "callback.callback(); "
@@ -573,8 +606,8 @@ class ChooseSplitProjects(CallbackSplitMixin, SplitProjects):
 
         project_parts = []
         current_indent = None
-        indented_less = lambda s: (current_indent is None or
-                                   len(s) < current_indent)
+        def indented_less(s): return (current_indent is None or
+                                      len(s) < current_indent)
 
         for line in util.get_lines_above():
             match = project_re.match(line)
