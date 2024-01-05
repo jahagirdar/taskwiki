@@ -88,6 +88,7 @@ execute "command! -buffer -range TaskWikiRedo :<line1>,<line2>"   . g:taskwiki_p
 execute "command! -buffer -range TaskWikiGetUUID :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().get_uuid()"
 execute "command! -buffer -range TaskWikiSetTJ3Depend :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().set_mktj3depend()"
 execute "command! -buffer -range TaskWikiNote :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().taskNote()"
+execute "command! -buffer -range TaskWikiNotePrivate :<line1>,<line2>"   . g:taskwiki_py . "SelectedTasks().taskNotePrivate()"
 
 execute "command! -buffer -range -nargs=* TaskWikiSort :<line1>,<line2>"     . g:taskwiki_py . "SelectedTasks().sort(<q-args>)"
 execute "command! -buffer -range -nargs=* TaskWikiAnnotate :<line1>,<line2>" . g:taskwiki_py . "SelectedTasks().annotate(<q-args>)"
@@ -162,5 +163,6 @@ if !exists('g:taskwiki_suppress_mappings')
         nnoremap <silent><buffer> <LocalLeader>tsp :TaskWikiGetUUID<CR>
         nnoremap <silent><buffer> <LocalLeader>tsc :TaskWikiSetTJ3Depend<CR>
         nnoremap <silent><buffer> <LocalLeader>tn :TaskWikiNote<CR>
+        nnoremap <silent><buffer> <LocalLeader>tnp :TaskWikiNotePrivate<CR>
 	"
 endif
