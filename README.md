@@ -1,4 +1,28 @@
-## Taskwiki
+# Taskwiki
+
+## Fork Note
+This is a fork of [taskwiki](https://github.com/tools-life/taskwiki).
+The last update to taskwiki was in Dec 2022, There are 22 pull requests awaiting review some from as far back as 2019.
+This fork adds some features that are required to bridge the gap and make taskwiki a proper project management tool.
+
+My setup is as follows.
+
+* Use Task wiki to enter tasks.
+* Use taskjuggler to schedule and present work.
+* Associate a public and private notes file with each task.
+* Use custom fields to capture
+	* Task dependencies 
+	* Effort estimate
+* The following new commands are added to support this workflow 
+	* <leader>tn Open the <uuid>.md file to capture public notes 
+	* <leader>tnp Open the <uuid>.private.md file to capture private notes 
+	* <leader>tsp Task set parent,Capture the uuid of current task in a vim variable
+	* <leader>tsc Task set child, Set the captured uuid as parent of current task in tj3depends field.
+# TODO 
+* Ensure new project data goes to project specific task database if defined.
+* Add command to set effort. current method is to do task edit or task modify.
+
+
 
 _Proper project management in vim.
 Standing on the shoulders of vimwiki and Taskwarrior_
@@ -91,7 +115,7 @@ vimwiki check lists that are unrelated to Taskwarrior.
 
 #### Individual tasks
 
-    * [ ] Install Taskwiki
+    * [ ] Install Taskwiki  #e3a54ef5
 
 Such tasks get synced to TaskWarrior when the file is saved. Additional
 metadata, as project, tags, priority, can be stored with this task.
@@ -99,17 +123,17 @@ metadata, as project, tags, priority, can be stored with this task.
 Some of that metadata gets visually represented in vim, and is updated
 if the representation changes in vim.
 
-    * [ ] Install Taskwiki !!! (2015-08-23 19:00)
+    * [ ] Install Taskwiki !!! (2015-08-23 19:00)  #e165694a
 
 #### Task lists
 
 Tasks can be grouped - simply written in one block. This has the advantage
 of any child tasks being marked as dependencies of the parent tasks.
 
-    * [ ] Get married
-        * [X] Find a girlfriend
-        * [ ] Buy a ring
-        * [ ] Propose
+    * [ ] Get married  #fc3b5313
+        * [X] Find a girlfriend  #3e5135e0
+        * [ ] Buy a ring  #31ead136
+        * [ ] Propose  #f60a7865
 
 #### Viewports
 
@@ -129,20 +153,20 @@ Upon saving, this will generate the list of matching tasks, in a tree-like
 fashion (respecting dependencies).
 
     == Home tasks | project:Home ==
-    * [ ] Feed the dog (2015-08-08)
-    * [ ] Tidy up the house !!
-      * [ ] Wash the dishes
-      * [ ] Declare war on the cobwebs
+    * [ ] Feed the dog (2015-08-08)  #609064ec
+    * [ ] Tidy up the house !!  #c25c5616
+      * [ ] Wash the dishes  #0812824e
+      * [ ] Declare war on the cobwebs  #1f339f75
 
 Tasks added (written) to the task list under the viewport inherit the defaults
 from its filter.
 
     == Home tasks | project:Home ==
-    * [ ] Feed the dog
-    * [ ] Tidy up the house !!
-      * [ ] Wash the dishes
-      * [ ] Declare war on the cobwebs
-    * [ ] Call the landlord about rent payment (2015-08-23)
+    * [ ] Feed the dog  #39936ffd
+    * [ ] Tidy up the house !!  #0b568321
+      * [ ] Wash the dishes  #dbba3cfa
+      * [ ] Declare war on the cobwebs  #2b5b63db
+    * [ ] Call the landlord about rent payment (2015-08-23)  #37aac561
           ^ the task above will have project:Home set automatically
 
 For some more complex filters, defaults cannot be automatically derived.
@@ -173,9 +197,9 @@ Multiple levels of preset headers are chained. So you can do this:
     == Taskwiki development || project:Taskwiki ==
     * Non-task notes
     === Bugs || +bugs ===
-    * [ ] Bug #42
+    * [ ] Bug #42  #afe9f5ee
     === Features || +features ===
-    * [ ] Some Feature
+    * [ ] Some Feature  #e8f5cf62
 
 Here both tasks are assigned the Taskwiki project, as well the respective tag.
 
@@ -185,7 +209,7 @@ Taskwiki can provide additional information reports on a task list (selected,
 or part of a viewport) and on individual tasks as well. These reports are shown
 in dynamic temporary splits.
 
-    * [ ] Tidy up the house !! (2015-08-23)
+    * [ ] Tidy up the house !! (2015-08-23)  #f5699824
 
 For example, hitting [CR] on the above task runs :TaskWikiInfo and displays:
 
@@ -231,7 +255,7 @@ They work in a similar fashion.
 Taskwiki provides commands for the all the traditional operation on tasks, such as
 starting, stopping, completing, deletion, annotation, generic modification, etc.
 
-    * [ ] Tidy up the house !! (2015-08-23)
+    * [ ] Tidy up the house !! (2015-08-23)  #e3eea0c3
 
 Say we want to postpone this task to tomorrow. This can be achieved by hitting
 [Leader]tm (:TaskWikiMod) a prompt will show up, where we enter our desired
@@ -241,7 +265,7 @@ modification:
 
 Task is instantly updated:
 
-    * [ ] Tidy up the house !! (2015-08-24)
+    * [ ] Tidy up the house !! (2015-08-24)  #f54bf930
 
 Task modification commands can be performed on a task currently below the
 cursor, or on a visually selected group of tasks.

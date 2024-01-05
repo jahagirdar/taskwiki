@@ -1,4 +1,13 @@
 from __future__ import print_function
+from taskwiki import jvstj3
+from taskwiki import preset
+from taskwiki import completion
+from taskwiki import decorators
+from taskwiki import viewport
+from taskwiki import util
+from taskwiki import sort
+from taskwiki import cache as cache_module
+from taskwiki import errors
 import base64
 import re
 import os
@@ -14,15 +23,6 @@ logging.info("Started Taskwiki")
 BASE_DIR = vim.eval("s:plugin_path")
 sys.path.insert(0, BASE_DIR)
 
-from taskwiki import errors
-from taskwiki import cache as cache_module
-from taskwiki import sort
-from taskwiki import util
-from taskwiki import viewport
-from taskwiki import decorators
-from taskwiki import completion
-from taskwiki import preset
-from taskwiki import jvstj3
 
 cache = cache_module.CacheRegistry()
 cache.load_current()
@@ -133,7 +133,16 @@ class SelectedTasks(object):
         This will work only on the first task
         """
         tsk = self.tasks[0]
-        vim.command(f"edit {os.environ.get('TASKNOTE_LOC','~/tasknotes')}/{tsk.uuid}.md")
+        vim.command(
+            f"edit {os.environ.get('TASKNOTE_LOC','~/tasknotes')}/{tsk.uuid}.md")
+
+    def taskNotePrivate(self):
+        """
+        This will work only on the first task
+        """
+        tsk = self.tasks[0]
+        vim.command(
+            f"edit {os.environ.get('TASKNOTE_LOC','~/tasknotes')}/{tsk.uuid}.private.md")
 
     @errors.pretty_exception_handler
     def set_mktj3depend(self):
