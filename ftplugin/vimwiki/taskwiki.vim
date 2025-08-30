@@ -162,10 +162,9 @@ if !exists('g:taskwiki_suppress_mappings')
   vnoremap <silent><buffer> <LocalLeader>. :TaskWikiRedo<CR>
   vnoremap <silent><buffer> <LocalLeader>+ :TaskWikiStart<CR>
   vnoremap <silent><buffer> <LocalLeader>- :TaskWikiStop<CR>
-	" Vijays TJ3 Mapping
-        nnoremap <silent><buffer> <LocalLeader>tsp :TaskWikiGetUUID<CR>
-        nnoremap <silent><buffer> <LocalLeader>tsc :TaskWikiSetTJ3Depend<CR>
-        nnoremap <silent><buffer> <LocalLeader>tn :TaskWikiNote<CR>
-        nnoremap <silent><buffer> <LocalLeader>tnp :TaskWikiNotePrivate<CR>
-	"
+  " Vijays TJ3 Mapping
+  nnoremap <silent><buffer> <LocalLeader>tsp :TaskWikiGetUUID<CR>
+  nnoremap <silent><buffer> <LocalLeader>tsc :TaskWikiSetTJ3Depend<CR>
+  nnoremap <silent><buffer> <LocalLeader>tn :TaskWikiNote<CR>
+  nnoremap <silent><buffer> <LocalLeader>tnp :TaskWikiNotePrivate<CR>
 endif
