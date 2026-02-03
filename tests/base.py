@@ -290,7 +290,7 @@ class MultipleSourceTest(IntegrationTest):
     def configure_global_variables(self):
         super(MultipleSourceTest, self).configure_global_variables()
 
-        self.client.feedkeys(':let g:taskwiki_extra_warriors={0}'.format(
+        self.client.feedkeys(':silent let g:taskwiki_extra_warriors={0}'.format(
             {'H': dict(data_location=str(self.extra_dir), taskrc_location='/')}
         ))
         self.client.feedkeys('\\<CR>')

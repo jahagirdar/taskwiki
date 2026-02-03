@@ -153,7 +153,7 @@ class TaskCollectionNode(object):
         if self.parent is None:
             self._parent = parent
         else:
-            raise ValueError("TaskCollectionNode %s cannot have multiple parents %s %s" % (repr(
+            raise ValueError("TaskCollectionNode %s cannot have multiple parents %s and  %s " % (repr(
                 self), repr(self.parent), repr(parent)))
 
     def __iter__(self):
